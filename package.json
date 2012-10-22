@@ -1,0 +1,11 @@
+{
+	"name": "cassandra-orm",
+	"main": "./lib/index.js",
+	"author": "rolandpoulter",
+	"license": "",
+	"version": "0.0.0",
+	"repository": "",
+	"description": "",
+	"dependencies": {},
+	"scripts": {}
+}
