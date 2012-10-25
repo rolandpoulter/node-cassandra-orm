@@ -1,54 +1,33 @@
-var assert = require('assert');
+module.exports = require('spc').describe('Cassandra ORM:', function () {
+	var cassandra = require('../');
 
-var cassandra = require('../lib'),
-    Model = cassandra.Model;
+	before(function (end) {
+		should();
 
+		this.options = {
+			keyspace: 'orm_test',
+			log: !true
+		};
 
-console.log('\n');
-
-
-var User = new Model('User', {
-	fields: {
-		name:     {type: String, index: true},
-		bio:      {type: String},
-		approved: {type: Boolean, index: true},
-		joinedAt: {type: Date, index: true},
-		age:      {type: Number, index: true}
-	}
-});
-
-
-var user = new User({
-	name: 'Roland',
-	bio: 'Failure',
-	approved: false,
-	joinedAt: Date.now(),
-	age: 23
-
-}, function (err) {
-	if (err) throw err;
-
-	User.byId(user.data.id, function (err, _user) {
-		if (err) throw err;
-
-		assert(user.getId().toString() === _user.getId().toString());
-
-		console.log('insert:', user.data);
-		console.log('\n');
-
-		console.log('select:', _user.data);
-		console.log('\n');
-
-		User.execute(User.cql.dropTable(), cassandra.close);
+		cassandra.connect(this.options, end);
 	});
+
+	after(function (end) {
+		cassandra.connection.execute('DROP KEYSPACE orm_test;', function (err) {
+			if (err) return end(err);
+
+			cassandra.close(end);
+		})
+	});
+
+	add(
+		require('./crud'),
+		require('./datatypes'),
+		require('./relationships'),
+		require('./validations'),
+		require('./connection'),
+		require('./other')
+	);
 });
 
-
-cassandra.connect({
-	keyspace: 'orm_test'
-});
-
-
-setTimeout(function () {
-	assert(!cassandra.connection);
-}, 1000);
+require('spc/reporter/dot')(module.exports);
