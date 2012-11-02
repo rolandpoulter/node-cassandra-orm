@@ -39,9 +39,9 @@ module.exports = require('spc').describe('CRUD:', function () {
 			this.subject.data.age.should.equal(this.age);
 		});
 
-		xit('should not have been approved', function () {
+		it('should not have been approved', function () {
 			// TODO: fix this
-			this.subject.data.aapproved.to.be.false;
+			expect(this.subject.data.approved).to.be.false;
 		});
 
 		it('should have set joined at to now', function () {
