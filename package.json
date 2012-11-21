@@ -16,7 +16,7 @@
 	},
 	"devDependencies": {
 		"spc": "0.0.3",
-		"require-stars": "0.0.1"
+		"require-stars": "0.0.2"
 	},
 	"scripts": {
 		"test": "node ./test"
