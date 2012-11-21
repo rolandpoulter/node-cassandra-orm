@@ -1,15 +1,9 @@
 module.exports = require('spc').describe('CRUD:', function () {
-	var fixtures = require('./fixtures'),
-	    schema = require('./schema'),
+	var fixtures = require('../fixtures'),
+	    schema = require('../schema'),
 	    User = schema.User;
 
-	var saveCount = 0;
-
 	describe('a user', function () {
-		after(function (end) {
-			schema.User.truncate(end);
-		});
-
 		beforeEach(function () {
 			this.subject = new User({
 				email:    this.email    = 'email',
@@ -40,7 +34,6 @@ module.exports = require('spc').describe('CRUD:', function () {
 		});
 
 		it('should not have been approved', function () {
-			// TODO: fix this
 			expect(this.subject.data.approved).to.be.false;
 		});
 
@@ -48,7 +41,7 @@ module.exports = require('spc').describe('CRUD:', function () {
 			var joinedAt = this.subject.data.joinedAt,
 			    now = Date.now();
 
-			joinedAt.should.be.within(now - 500, now + 500);
+			joinedAt.should.be.within(now - 50, now + 50);
 		});
 
 		describe('when saved', function () {
@@ -57,8 +50,6 @@ module.exports = require('spc').describe('CRUD:', function () {
 
 				this.subject.save(function (err) {
 					if (err) return end(err);
-
-					saveCount += 1;
 
 					User.byId(that.subject.getId(), function (err, user) {
 						that.user = user;
@@ -91,14 +82,12 @@ module.exports = require('spc').describe('CRUD:', function () {
 				this.user.data.age.should.equal(this.subject.data.age);
 			});
 
-			xit('should store approved', function () {
-				// TODO: fix this
+			it('should store approved', function () {
 				this.user.data.approved.should.equal(this.subject.data.approved);
 			});
 
-			xit('should store joinedAt', function () {
-				// TODO: fix this
-				this.user.data.joinedAt.getTime().should.equal(this.subject.data.joinedAt);
+			it('should store joinedAt', function () {
+				this.user.data.joinedAt.toString().should.equal(new Date(this.subject.data.joinedAt).toString());
 			});
 
 			describe('and updated', function () {
@@ -144,12 +133,10 @@ module.exports = require('spc').describe('CRUD:', function () {
 					});
 				});
 
-				xit('should be gone', function () {
-					// TODO: figure out how to verify that a record was delete, cassandra doesn't delete rows right away it marks them for deletion.
-					expect(this.user.data.keys).to.not.be.ok;
-				});
-
 				it('should only have an id', function () {
+					// NOTE: Cassandra doesn't delete rows right away, so
+					//       there is no real way to confirm that a row has been deleted.
+
 					var properties = Object.keys(this.user.data);
 
 					properties.length.should.equal(1);
@@ -164,34 +151,11 @@ module.exports = require('spc').describe('CRUD:', function () {
 			fixtures.save('users', end);
 		});
 
-		after(function (end) {
-			schema.User.truncate(end);
-		});
-
-		describe('count', function () {
+		describe('find', function () {
 			beforeEach(function (end) {
 				var that = this;
 
-				User.count(this.where || {}, this.limit, this.offset, function (err, count) {
-					if (err) return end(err);
-
-					that.count = count;
-					end();
-				});
-			});
-
-			it('should', function () {
-				// TODO: this is broken because Spc isn't calling after blocks for specs the right way
-				// actually Spc seems to be working right, It's not working because records dont get removed immediately in cassandra
-				(saveCount + fixtures.users.length).should.equal(this.count);
-			});
-		});
-
-		describe('all', function () {
-			beforeEach(function (end) {
-				var that = this;
-
-				User.all({}, function (err, users) {
+				User.find({}, function (err, users) {
 					if (err) return end(err);
 
 					that.users = users;
@@ -199,7 +163,7 @@ module.exports = require('spc').describe('CRUD:', function () {
 				});
 			});
 
-			it('should', function () {
+			it('should include all saved rows', function () {
 				
 			});
 		});

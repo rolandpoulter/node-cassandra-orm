@@ -3,7 +3,7 @@
 	"main": "./lib/index.js",
 	"author": "rolandpoulter",
 	"license": "",
-	"version": "0.0.2",
+	"version": "0.0.4",
 	"repository": "",
 	"description": "",
 	"dependencies": {
@@ -15,7 +15,8 @@
 		"helenus": "0.5.9"
 	},
 	"devDependencies": {
-		"spc": "0.0.2"
+		"spc": "0.0.3",
+		"require-stars": "0.0.1"
 	},
 	"scripts": {
 		"test": "node ./test"

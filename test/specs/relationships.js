@@ -1,5 +1,5 @@
 module.exports = require('spc').describe('Relationships:', function () {
-	var schema = require('./schema');
+	var schema = require('../schema');
 
 	with (schema) {
 		User.hasMany(Post, {as: 'posts', via: 'userId'});
