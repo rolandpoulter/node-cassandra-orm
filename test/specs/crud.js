@@ -3,6 +3,11 @@ module.exports = require('spc').describe('CRUD:', function () {
 	    schema = require('../schema'),
 	    User = schema.User;
 
+	before(function () {
+		// TODO: why does the call in ../index.js not work
+		should();
+	});
+
 	describe('a user', function () {
 		beforeEach(function () {
 			this.subject = new User({
