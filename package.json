@@ -3,7 +3,7 @@
 	"main": "./lib/index.js",
 	"author": "rolandpoulter",
 	"license": "",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"repository": "",
 	"description": "",
 	"dependencies": {
