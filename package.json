@@ -12,7 +12,7 @@
 		"mrg": "0.0.2",
 
 		"async": "0.1.22",
-		"helenus": "0.5.9"
+		"helenus": "0.6.2"
 	},
 	"devDependencies": {
 		"spc": "0.0.3",
